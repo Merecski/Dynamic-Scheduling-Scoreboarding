@@ -22,98 +22,98 @@ LOG_LEVEL = logging.INFO
 
 # All of the initialized memory as specified in project pdf
 memory = {
-    0:    45,
-    1:    12,
-    2:    0,
-    3:    0,
-    4:    10,
-    5:    135,
-    6:    254,
-    7:    127,
-    8:    18,
-    9:    4,
-    10:    55,
-    11:    8,
-    12:    2,
-    13:    98,
-    14:    13,
-    15:    5,
-    16:    223,
-    17:    158,
-    18:    167,
+    0:      45,
+    1:      12,
+    2:      0,
+    3:      0,
+    4:      10,
+    5:      135,
+    6:      254,
+    7:      127,
+    8:      18,
+    9:      4,
+    10:     55,
+    11:     8,
+    12:     2,
+    13:     98,
+    14:     13,
+    15:     5,
+    16:     223,
+    17:     158,
+    18:     167,
 }
 
 # Creating all possible registers to be used and initialized to be empty
 registers = {
-    'F0':    None,
-    'F1':    None,
-    'F2':    None,
-    'F3':    None,
-    'F4':    None,
-    'F5':    None,
-    'F6':    None,
-    'F7':    None,
-    'F8':    None,
-    'F9':    None,
-    'F10':    None,
-    'F11':    None,
-    'F12':    None,
-    'F13':    None,
-    'F14':    None,
-    'F15':    None,
-    'F16':    None,
-    'F17':    None,
-    'F18':    None,
-    'F19':    None,
-    'F20':    None,
-    'F21':    None,
-    'F22':    None,
-    'F23':    None,
-    'F24':    None,
-    'F25':    None,
-    'F26':    None,
-    'F27':    None,
-    'F28':    None,
-    'F29':    None,
-    'F30':    None,
-    'F31':    None,
-    '$0':    None,
-    '$1':    None,
-    '$2':    None,
-    '$3':    None,
-    '$4':    None,
-    '$5':    None,
-    '$6':    None,
-    '$7':    None,
-    '$8':    None,
-    '$9':    None,
-    '$10':    None,
-    '$11':    None,
-    '$12':    None,
-    '$13':    None,
-    '$14':    None,
-    '$15':    None,
-    '$16':    None,
-    '$17':    None,
-    '$18':    None,
-    '$19':    None,
-    '$20':    None,
-    '$21':    None,
-    '$22':    None,
-    '$23':    None,
-    '$24':    None,
-    '$25':    None,
-    '$26':    None,
-    '$27':    None,
-    '$28':    None,
-    '$29':    None,
-    '$30':    None,
-    '$31':    None,
+    'F0':   None,
+    'F1':   None,
+    'F2':   None,
+    'F3':   None,
+    'F4':   None,
+    'F5':   None,
+    'F6':   None,
+    'F7':   None,
+    'F8':   None,
+    'F9':   None,
+    'F10':  None,
+    'F11':  None,
+    'F12':  None,
+    'F13':  None,
+    'F14':  None,
+    'F15':  None,
+    'F16':  None,
+    'F17':  None,
+    'F18':  None,
+    'F19':  None,
+    'F20':  None,
+    'F21':  None,
+    'F22':  None,
+    'F23':  None,
+    'F24':  None,
+    'F25':  None,
+    'F26':  None,
+    'F27':  None,
+    'F28':  None,
+    'F29':  None,
+    'F30':  None,
+    'F31':  None,
+    '$0':   None,
+    '$1':   None,
+    '$2':   None,
+    '$3':   None,
+    '$4':   None,
+    '$5':   None,
+    '$6':   None,
+    '$7':   None,
+    '$8':   None,
+    '$9':   None,
+    '$10':  None,
+    '$11':  None,
+    '$12':  None,
+    '$13':  None,
+    '$14':  None,
+    '$15':  None,
+    '$16':  None,
+    '$17':  None,
+    '$18':  None,
+    '$19':  None,
+    '$20':  None,
+    '$21':  None,
+    '$22':  None,
+    '$23':  None,
+    '$24':  None,
+    '$25':  None,
+    '$26':  None,
+    '$27':  None,
+    '$28':  None,
+    '$29':  None,
+    '$30':  None,
+    '$31':  None,
 }
 
-class Setup():
+class Setup:
 
-    def __init__(self,txt_file):
+    def __init__(self, txt_file):
         self.sb = Scoreboard()
         self.text = txt_file
         self.instr = []
@@ -173,7 +173,7 @@ class Scoreboard:
         #check FU for WAW hazards
         #check FU for avalible functional unit
         #ignore empty instructions
-        if instruction is None:
+        if instruction == None:
             return False
         else:
             #Checking for matching FU types, Whether matching FU type is busy,
@@ -237,49 +237,49 @@ class Scoreboard:
         elif not fu.is_branch:
             registers[fu.fi] = value
 
-            self.instructions[fu.inst_count].written = self.clock
+        self.instructions[fu.inst_count].written = self.clock
 
         #    BRANCH PROCEDURE HERE    #
         # Checking if the Branch flag is set for the FU
         # If so, engange in procedures
-            if fu.bf:
-                # the difference between PC of the branch and how far back it is branching to
-                branch_offest = fu.inst_count - int(fu.fi)
-                j = 1
-                # reset the PC to immediately after the branch
-                self.pc = fu.inst_count + 1
+        if fu.bf:
+            # the difference between PC of the branch and how far back it is branching to
+            branch_offest = fu.inst_count - int(fu.fi)
+            j = 1
+            # reset the PC to immediately after the branch
+            self.pc = fu.inst_count + 1
 
-                # Instruction inseretion algorithm
-                # until the offest reaches the branch
-                while self.pc != branch_offest:
-                    inst_func = inst_funcs[self.instructions[branch_offest].repr.split()[0]]
-                    instruction = inst_func(' '.join(self.instructions[branch_offest].repr.split()))
-                    # continuously inserts new instructions
-                    # into the instruction list
-                    temp = self.instructions[branch_offest]
-                    self.instructions.insert(fu.inst_count + j, instruction)
-                    branch_offest += 1
-                    j += 1
+            # Instruction inseretion algorithm
+            # until the offest reaches the branch
+            while self.pc != branch_offest:
+                inst_func = inst_funcs[self.instructions[branch_offest].repr.split()[0]]
+                instruction = inst_func(' '.join(self.instructions[branch_offest].repr.split()))
+                # continuously inserts new instructions
+                # into the instruction list
+                temp = self.instructions[branch_offest]
+                self.instructions.insert(fu.inst_count + j, instruction)
+                branch_offest += 1
+                j += 1
 
-                for fu2 in self.units:
-                    # clearing all FUs that proceded the current one
-                    if fu.inst_count < fu2.inst_count:
-                        # Only occurs if branch is taken
-                        del self.register_status[fu2.fi]
-                        fu2.clear()
-                # Cleaning up
-                del self.register_status[fu.fj]
-                # finally clearing branch's FU
-                fu.clear()
+            for fu2 in self.units:
+                # clearing all FUs that proceded the current one
+                if fu.inst_count < fu2.inst_count:
+                    # Only occurs if branch is taken
+                    del self.register_status[fu2.fi]
+                    fu2.clear()
+            # Cleaning up
+            del self.register_status[fu.fj]
+            # finally clearing branch's FU
+            fu.clear()
 
-            elif(fu.repr[0][0] == 'B'):
-                # Format of branch is different
-                # meant to clean up but ran out of time
-                del self.register_status[fu.fj]
-                fu.clear()
-            else:
-                # clear out the result register status
-                del self.register_status[fu.fi]
+        elif(fu.repr[0][0] == 'B'):
+            # Format of branch is different
+            # meant to clean up but ran out of time
+            del self.register_status[fu.fj]
+            fu.clear()
+        else:
+            # clear out the result register status
+            del self.register_status[fu.fi]
             # This is for all non-branch instr
             fu.clear()
 

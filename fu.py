@@ -113,6 +113,7 @@ def __load(self, mem, reg):
 
 def __store(self, mem, reg):
     return
+
 def __beq(self, mem, reg):
     self.is_branch = True
     self.src1_value = int(reg[self.fj])
@@ -121,6 +122,7 @@ def __beq(self, mem, reg):
         self.bf = True
     else:
         self.bf = False
+
 def __bne(self, mem, reg):
     self.is_branch = True
     self.src1_value = int(reg[self.fj])
@@ -129,45 +131,52 @@ def __bne(self, mem, reg):
         self.bf = True
     else:
         self.bf = False
+
 def __add(sef, mem, reg):
     self.src1_value = int(reg[self.fj])
     self.src2_value = int(self.fk)
     self.dst_value = self.src1_value + self.src2_value
+
 def __addi(self, mem, reg):
     self.src1_value = int(reg[self.fj])
     self.src2_value = int(self.fk)
     self.dst_value = self.src1_value + self.src2_value
+
 def __subi(self, mem, reg):
     self.src1_value = int(reg[self.fj])
     self.src2_value = int(self.fk)
     self.dst_value = self.src1_value + self.src2_value
+
 def __addd(self, mem, reg):
     self.src1_value = float(reg[self.fj])
     self.src2_value = float(reg[self.fk])
     self.dst_value = self.src1_value + self.src2_value
+
 def __subd(self, mem, reg):
     self.src1_value = float(reg[self.fj])
     self.src2_value = float(reg[self.fk])
     self.dst_value = self.src1_value + self.src2_value
+
 def __mult(self, mem, reg):
     self.src1_value = float(reg[self.fj])
     self.src2_value = float(reg[self.fk])
     self.dst_value = self.src1_value * self.src2_value
+
 def __div(self, mem, reg):
     self.src1_value = float(reg[self.fj])
     self.src2_value = float(reg[self.fk])
     self.dst_value = self.src1_value / self.src2_value
 
 command_list = {
-    'L.D':        __load,
-    'S.D':        __store,
-    'BEQ':        __beq,
-    'BNE':        __bne,
-    'ADD':        __add,
-    'ADDI':        __addi,
-    'SUBI':        __subi,
-    'ADD.D':    __addd,
-    'SUB.D':    __subd,
+    'L.D':       __load,
+    'S.D':       __store,
+    'BEQ':       __beq,
+    'BNE':       __bne,
+    'ADD':       __add,
+    'ADDI':      __addi,
+    'SUBI':      __subi,
+    'ADD.D':     __addd,
+    'SUB.D':     __subd,
     'MULT.D':    __mult,
     'DIV.D':    __div,
 }

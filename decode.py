@@ -82,32 +82,32 @@ def __arithmetic(inst):
 instructions = {
     #Variable function names to point op code to correct spliting method
     #for loading instructions
-    'L.D':        __load,
-    'S.D':        __store,
-    'BEQ':        __branch,
-    'BNE':        __branch,
-    'ADD':        __arithmetic,
-    'ADDI':        __arithmetic,
-    'SUB':        __arithmetic,
-    'SUBI':        __arithmetic,
+    'L.D':      __load,
+    'S.D':      __store,
+    'BEQ':      __branch,
+    'BNE':      __branch,
+    'ADD':      __arithmetic,
+    'ADDI':     __arithmetic,
+    'SUB':      __arithmetic,
+    'SUBI':     __arithmetic,
     'ADD.D':    __arithmetic,
     'SUB.D':    __arithmetic,
-    'MULT.D':    __arithmetic,
+    'MULT.D':   __arithmetic,
     'DIV.D':    __arithmetic,
     }
 
 functional_units = {
     #Corresponding Functional Unit types and Instructions
-    'L.D':        'integer',
-    'S.D':        'integer',
-    'BEQ':        'integer',
-    'BNE':        'integer',
-    'ADD':        'integer',
-    'ADDI':        'integer',
-    'SUBI':        'integer',
+    'L.D':      'integer',
+    'S.D':      'integer',
+    'BEQ':      'integer',
+    'BNE':      'integer',
+    'ADD':      'integer',
+    'ADDI':     'integer',
+    'SUBI':     'integer',
     'ADD.D':    'add',
     'SUB.D':    'add',
-    'MULT.D':    'mult',
+    'MULT.D':   'mult',
     'DIV.D':    'div',
 }
 
