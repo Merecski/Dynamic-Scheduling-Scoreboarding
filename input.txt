@@ -1,0 +1,11 @@
+.integer 1 1
+.mult 2 10
+.add 1 2
+.div 1 40
+L.D F2 0($1)
+MULT.D F4 F2 F0
+L.D F6, 0($2)
+ADD.D F6, F4, F2
+S.D F6, 0($2)
+SUB.D F3, F6, F0
+S.D F3, 0($3)
