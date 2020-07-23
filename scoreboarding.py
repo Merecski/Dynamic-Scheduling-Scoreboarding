@@ -9,11 +9,16 @@
 #                                                       #
 #########################################################
 
+import logging
+import re
+import time
+
 from fu import FunctionalUnit
 from decode import instructions as inst_funcs
-import re
 
 TEXT_FILE = 'in.txt'        #INPUT FILE NAME
+FORMAT = '[%(levelname)s][%(funcName)s][%(lineno)d]: %(message)s'
+LOG_LEVEL = logging.INFO
 
 # All of the initialized memory as specified in project pdf
 memory = {
@@ -38,8 +43,7 @@ memory = {
     18:    167,
 }
 
-# Creating all possible registers to be used
-# Initialized to be empty
+# Creating all possible registers to be used and initialized to be empty
 registers = {
     'F0':    None,
     'F1':    None,
@@ -299,6 +303,10 @@ class Scoreboard:
     def tick(self):
         # function is looped, simulating the 'tick' of a cpu
         # assumes all functions are not in lock initally
+        log.debug('Scoreboard tick')
+        if logging.getLevelName(log.getEffectiveLevel()) == 'DEBUG':
+            time.sleep(0.2)
+
         for fu in self.units:
             fu.lock = False
 
@@ -311,8 +319,8 @@ class Scoreboard:
 
         for fu in self.units:
             # For loop to check and update current state of every functional unit
-            # debugging purposes
-            # print str(fu.repr) + ' == ' + str(fu.lock) + ' Clocks: ' + str(fu.clocks)
+            log.debug('%s == %s', str(fu.repr), str(fu.lock))
+
             if self.can_issue(next_instruction, fu):
                 #print 'issued'
                 self.issue(next_instruction, fu)
@@ -327,7 +335,7 @@ class Scoreboard:
                 self.execute(fu)
                 fu.lock = True
             elif fu.issued():
-                #print ' cant do anything'
+                log.debug('Cant do anything')
                     # the functional unit is in use but can't do anything
                 fu.lock = True
             #print fu.lock
@@ -342,6 +350,9 @@ class Scoreboard:
         self.clock += 1
 
 if __name__ == '__main__':
+    logging.basicConfig(level=LOG_LEVEL, format=FORMAT)
+    log = logging.getLogger(__name__)
+
     sb = Setup(TEXT_FILE)
 
     sb.split_file(TEXT_FILE)
