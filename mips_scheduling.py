@@ -27,10 +27,11 @@ def main():
     log = logging.getLogger(__name__)
 
     if args.scoreboard:
+        from algorithms import scoreboard
         if args.filename:
             filename = args.filename
         else:
-            filename = 'scoreboard_input.txt'
+            filename = 'examples/scoreboard_input.txt'
 
         architecure = algorithms.Setup(filename)
         architecure.setup_scoreboard()
@@ -42,10 +43,11 @@ def main():
             print(str(instruction.print_inst()))
 
     elif args.tomasulo:
+        from algorithms import tomasulo
         if args.filename:
             filename = args.filename
         else:
-            filename = 'tomasulo_input.txt'
+            filename = 'examples/tomasulo_input.txt'
 
         architecure = algorithms.Setup(filename)
         architecure.setup_tomasulo()
