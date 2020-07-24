@@ -7,11 +7,11 @@ class ReorderBuffer:
         self.busy = False
         self.wb_complete = False
         self.type = None
-        self.fi = self.fj = self.fk = None        
+        self.fi = self.fj = self.fk = None
         self.di = self.dj = self.dk = None #For common data bus
         self.qj = self.qk = False
-        self.rj = self.rk = None 
-    
+        self.rj = self.rk = None
+
     def clear(self):
         self.ready = False
         self.busy = False
@@ -19,7 +19,7 @@ class ReorderBuffer:
         self.fi = self.fj = self.fk = None
         self.qj = self.qk = None
         self.rj = self.rk = None
-        
+
     def new_entry(self, fu, pc, dj, dk):
         self.repr = fu.repr
         self.type = fu.type
@@ -32,13 +32,13 @@ class ReorderBuffer:
         else:
             self.fj = fu.fj
             self.fk = fu.fk
-        self.busy = True        
+        self.busy = True
         self.fi = fu.fi
         return self.tag
-        
+
     def printout(self):
         return(str(self.tag)  + ' '+ str(self.ready) + ' ' + str(self.fi) + ' ' + \
             str(self.dj) + ' ' + str(self.dk) + ' ' + str(self.qj) + ' ' + str(self.qk))
-    
+
     def commit(self, mem, reg):
         return

@@ -1,13 +1,10 @@
 #Refernce: https://www.cs.umd.edu/class/fall2001/cmsc411/projects/dynamic/example1.html
 
-#########################################################
-#                                                       #
-#    EECE 552 Computer Design Project 1                 #
-#    Authors: Eugene Merecki                            #
-#    Description: MIPS Scoreboarding Algorithm          #
-#    Futher details in README.txt File                  #
-#                                                       #
-#########################################################
+"""EECE 552 Computer Design Project
+   Authors: Eugene Merecki
+   Description: MIPS Scoreboarding Algorithm
+   Futher details in README.txt File
+"""
 
 import re
 

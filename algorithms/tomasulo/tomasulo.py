@@ -1,19 +1,15 @@
-#!/usr/bin/env python3
-
-#########################################################
-#                                                       #
-#    EECE 552 Computer Design Project 1                 #
-#    Authors: Eugene Merecki                            #
-#    Description: MIPS Scoreboarding Algorithm          #
-#    Futher details in README.txt File                  #
-#                                                       #
-#########################################################
+"""EECE 552 Computer Design Project
+   Authors: Eugene Merecki
+   Description: MIPS Scoreboarding Algorithm
+   Futher details in README.txt File
+"""
 
 import logging
 import time
 
 import hardware
 
+from .fu_tomasulo import FunctionalUnit
 from .decode_tomasulo import instructions as inst_funcs
 from .rob import ReorderBuffer as rebuffer
 

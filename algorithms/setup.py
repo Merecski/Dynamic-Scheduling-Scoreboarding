@@ -1,14 +1,9 @@
+""" Basic class to ease the creattion of MIPS algorithms
 """
-Basic class to ease the creattion of MIPS algorithms
-"""
-
-
-import algorithms.scoreboard
-dir(algorithms.scoreboard)
 
 class Setup:
     """Software defined MIPS instruction properties
-    
+
     Args:
         text_file (str): Location of input file
         instr (list): Every instruction in input file
@@ -45,14 +40,14 @@ class Setup:
         for instruction in self.instr:
             #split up every line in file to FU or Instruction
             self.split_tomasulo_line(instruction)
-   
+
     def split_scoreboard_line(self, line):
         #determines if the current line is a command for a functional unit or instruction
         if line[0] == '.':
             self.split_fu(line)
         else:
             self.split_inst(line)
-            
+
     def split_tomasulo_line(self, line):
         #determines if the current line is a command for a functional unit or instruction
         if line[0] == '#':

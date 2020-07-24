@@ -1,13 +1,8 @@
-#!/usr/bin/env python3
-
-#########################################################
-#                                                       #
-#    EECE 552 Computer Design Project 1                 #
-#    Authors: Eugene Merecki                            #
-#    Description: MIPS Scoreboarding Algorithm          #
-#    Futher details in README.txt File                  #
-#                                                       #
-#########################################################
+""" EECE 552 Computer Design Project
+    Authors: Eugene Merecki
+    Description: MIPS Scoreboarding Algorithm
+    Futher details in README.txt File
+"""
 
 import logging
 import time
@@ -16,7 +11,6 @@ import hardware
 
 from .decode_scoreboard import instructions as inst_funcs
 
-FORMAT = '[%(levelname)s][%(funcName)s][%(lineno)d]: %(message)s'
 LOG_LEVEL = logging.DEBUG
 log = logging.getLogger(__name__)
 
