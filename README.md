@@ -10,7 +10,7 @@
 
 Scoreboarding is a centralized method, first used in the CDC 6600 computer, 
 for dynamically scheduling a pipeline so that the instructions can execute out of 
-order when there are no conflicts and the hardware is available.
+order when there are no conflicts and the hardware is available
 
 Instructions are decoded in order and go through the following four stages.
 - Issue
@@ -79,6 +79,7 @@ Otherwise the program will not run because of a null instruction.
 ## Example Scoreboarding Input File (with looping):
 
 These insructions are supplied in the **scoreboard_input.txt** file.
+
 This provides a convenient table for deciphering the parts of the instruction.
 
 #### Functional Unit Inputs
