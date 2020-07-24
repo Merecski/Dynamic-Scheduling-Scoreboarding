@@ -14,7 +14,6 @@ import time
 
 import hardware
 
-from .fu_tomasulo import FunctionalUnit
 from .decode_tomasulo import instructions as inst_funcs
 from .rob import ReorderBuffer as rebuffer
 

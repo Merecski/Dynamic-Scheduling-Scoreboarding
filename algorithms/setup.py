@@ -24,23 +24,23 @@ class Setup:
         self.reorder_buffer = None
 
     def setup_scoreboard(self):
-        from .scoreboard import scoreboard
-        
-        self.algorithm = scoreboard.Scoreboard()
-        self.functional_unit = scoreboard.FunctionalUnit
-        self.instruction_functions = scoreboard.inst_funcs
+        from . import scoreboard as sb
+
+        self.algorithm = sb.Scoreboard()
+        self.functional_unit = sb.FunctionalUnit
+        self.instruction_functions = sb.instruction_functions
         self.split_file()
         for instruction in self.instr:
             #split up every line in file to FU or Instruction
             self.split_scoreboard_line(instruction)
 
     def setup_tomasulo(self):
-        from .tomasulo import tomasulo
-        
-        self.algorithm = tomasulo.Tomasulo()
-        self.functional_unit = tomasulo.FunctionalUnit
-        self.instruction_functions = tomasulo.inst_funcs
-        self.reorder_buffer = tomasulo.rebuffer
+        from . import tomasulo as tom
+
+        self.algorithm = tom.Tomasulo()
+        self.functional_unit = tom.FunctionalUnit
+        self.instruction_functions = tom.instruction_functions
+        self.reorder_buffer = tom.ReorderBuffer
         self.split_file()
         for instruction in self.instr:
             #split up every line in file to FU or Instruction

@@ -14,7 +14,6 @@ import time
 
 import hardware
 
-from .fu_scoreboard import FunctionalUnit
 from .decode_scoreboard import instructions as inst_funcs
 
 FORMAT = '[%(levelname)s][%(funcName)s][%(lineno)d]: %(message)s'
