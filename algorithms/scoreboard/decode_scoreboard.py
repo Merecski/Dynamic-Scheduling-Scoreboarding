@@ -1,6 +1,6 @@
 #########################################################
 #                                                       #
-#    EECE 552 Computer Design Project 1                 #
+#    EECE 552 Computer Design Project                   #
 #    Authors: Eugene Merecki                            #
 #    Description: MIPS Scoreboarding Algorithm          #
 #    Futher details in README.txt File                  #
@@ -10,16 +10,27 @@
 import re
 
 class Instruction:
+    """Software defined MIPS instruction properties
+    
+    Args:
+        issued:
+        read:
+        executed:
+        op: instruction operation
+        fi: destination register
+        fj: source register
+        fk: source register
+        repr: string representation of instruction
+    """
     def __init__(self, repr, op, dst, src1, src2):
         self.issued = self.read = self.executed = self.written = -1
-        self.op = op          # instruction operation
-        self.fi = dst         # destination register
-        self.fj = src1        # source register
-        self.fk = src2        # source register
-        self.repr = repr      # string representation or instruction
+        self.op = op
+        self.fi = dst
+        self.fj = src1
+        self.fk = src2
+        self.repr = repr
 
     def print_inst(self):
-        #pre-scripted function to print instructions out
         return "%-24s%-8d%-8d%-8d%-8d" % \
         (self.repr, self.issued, self.read, self.execute, self.written)
 
@@ -28,20 +39,14 @@ class Instruction:
 
 
 def split_instruction(instruction):
-    """
-    Inital spliting of command procesure
-    splits where ',' exist
-    removes all empty entities in list
-    """
+    # Inital spliting of command procesure
     inst = re.split(',| ', instruction)
     return list(filter(None, inst))
 
 def __load(inst):
-    """
-    Taking op code and finding corresponding FU type from dictionary
-    looking for memory to load from
-    destination register stripped
-    return object with assigned variables
+    """Taking op code and finding corresponding FU type from dictionary.
+    looking for memory to load from destination register stripped.
+    return object with assigned variables.
     """
     inst_split = split_instruction(inst)
     op = functional_units[inst_split[0]]
@@ -61,13 +66,9 @@ def __store(inst):
 def __branch(inst):
     inst_split = split_instruction(inst)
     op = functional_units[inst_split[0]]
-    #destination register
     fi = inst_split[1]
-    #source 1 register
     fj = inst_split[2]
-    #source 2 register
     fk = inst_split[3]
-    #return object with assigned variables
     return Instruction(inst, op, fi, fj, fk)
 
 def __arithmetic(inst):
