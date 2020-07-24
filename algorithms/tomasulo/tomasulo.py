@@ -18,77 +18,9 @@ from .fu_tomasulo import FunctionalUnit
 from .decode_tomasulo import instructions as inst_funcs
 from .rob import ReorderBuffer as rebuffer
 
-TEXT_FILE = '../tomasulo_input.txt'        #INPUT FILE NAME
 FORMAT = '[%(levelname)s][%(funcName)s][%(lineno)d]: %(message)s'
 LOG_LEVEL = logging.DEBUG
 log = logging.getLogger(__name__)
-
-
-class Setup:
-    def __init__(self, txt_file):
-        self.algorithm = Tomasulo()
-        self.text_file = txt_file
-        self.instr = []
-        self.func_unit = []
-
-    def split_line(self, line):
-        #determines if the current line is a command for a functional unit or instruction
-        if line[0] == '#':
-            return
-        elif line[0] == '.':
-            self.split_fu(line)
-        elif line[0] == '$':
-            self.split_rob(line)
-        else:
-            self.split_inst(line)
-
-    def split_inst(self, line):
-        #Splits instruction and append into instruction objects
-        line = line.split()
-
-        #Striping out op code to properly setup instruction
-        line[0] = line[0].lstrip('.')
-        key = line[0]
-        inst_func = inst_funcs[key]
-        instruction = inst_func(' '.join(line))
-
-        #Creating a List of object type Instruction with it's own personal variables
-        self.algorithm.instructions.append(instruction)
-
-    def split_fu(self, line):
-        #splits functional unit and append objects on a variable loop
-        line = line.strip('.').split()
-        self.func_unit.append(line)
-        f_unit = line[0]
-        clock = line[2]
-        for i in range(0,int(line[1])):
-            #list of object type Functional Units with own variables
-            #appending FU for specified number
-            self.algorithm.units.append(FunctionalUnit(f_unit, int(clock)))
-
-    def split_rob(self, line):
-        line = line.strip('$')
-        for i in range(0,int(line)):
-            self.algorithm.buffer.append(rebuffer())
-
-    def split_file(self):
-        #reading lines out from file then sending lines off for further spliting
-        try:
-            with open(self.text_file,"r") as input:
-                self.instr = [line.strip() for line in input]
-        except FileNotFoundError:
-            from os import getcwd
-            log.error(f'File"{self.text_file}" was not found in "{getcwd()}"')
-            log.error('Exiting...')
-            exit()
-
-        for instruction in self.instr:
-            #split up every line in file to FU or Instruction
-            self.split_line(instruction)
-
-    def run(self):
-        while not self.algorithm.complete():
-            self.algorithm.tick()
 
 
 class Tomasulo:
@@ -341,38 +273,3 @@ class Tomasulo:
                 log.debug('writing this')
 
         self.clock += 1
-
-if __name__ == '__main__':
-    from fu_tomasulo import FunctionalUnit
-    from decode_tomasulo import instructions as inst_funcs
-    from rob import ReorderBuffer as rebuffer
-
-    logging.basicConfig(level=LOG_LEVEL, format=FORMAT)
-    log = logging.getLogger(__name__)
-
-    tomasulo = Setup(TEXT_FILE)
-
-    tomasulo.split_file(TEXT_FILE)
-
-    while not tomasulo.algorithm.complete():
-        tomasulo.algorithm.tick()
-
-    print('_'*18 + ' TOMASULO TABLE ' + '_'*18)
-    print('Instruction\t\tIS\tEX\tWB\tCM')
-    for inst in tomasulo.algorithm.instructions:
-        print(str(inst.print_inst()))
-
-    print( '_'*55 )
-    print('\nFP REGISTERS')
-    for reg in  tomasulo.algorithm.registers:
-        if 'F' in reg:
-            print (str(reg) + ':\t' + str( tomasulo.algorithm.registers[reg]))
-
-    print( '_'*55 )
-    print('\nMEMORY')
-    for mem in tomasulo.algorithm.memory:
-        print(str(mem) + ':\t'+ str(tomasulo.algorithm.memory[mem]))
-
-
-
-

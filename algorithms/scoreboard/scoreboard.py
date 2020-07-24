@@ -17,70 +17,9 @@ import hardware
 from .fu_scoreboard import FunctionalUnit
 from .decode_scoreboard import instructions as inst_funcs
 
-TEXT_FILE = 'scoreboard_input.txt'        #INPUT FILE NAME
 FORMAT = '[%(levelname)s][%(funcName)s][%(lineno)d]: %(message)s'
 LOG_LEVEL = logging.DEBUG
 log = logging.getLogger(__name__)
-
-
-class Setup:
-
-    def __init__(self, txt_file):
-        self.algorithm = Scoreboard()
-        self.text_file = txt_file
-        self.instr = []
-        self.func_unit = []
-
-    def split_line(self, line):
-        #determines if the current line is a command for a functional unit or instruction
-        if line[0] == '.':
-            self.split_fu(line)
-        else:
-            self.split_inst(line)
-
-    def split_inst(self, line):
-        #Splits instruction and append into instruction objects
-        line = line.split()
-
-        #Striping out op code to properly setup instruction
-        line[0] = line[0].lstrip('.')
-        key = line[0]
-        inst_func = inst_funcs[key]
-        instruction = inst_func(' '.join(line))
-
-        #Creating a List of object type Instruction with it's own personal variables
-        self.algorithm.instructions.append(instruction)
-
-    def split_fu(self, line):
-        #splits functional unit and append objects on a variable loop
-        line = line.strip('.').split()
-        self.func_unit.append(line)
-        f_unit = line[0]
-        clock = line[2]
-        for i in range(0,int(line[1])):
-            #list of object type Functional Units with own variables
-            #appending FU for specified number
-            self.algorithm.units.append(FunctionalUnit(f_unit, int(clock)))
-
-
-    def split_file(self):
-        #reading lines out from file then sending lines off for further spliting
-        try:
-            with open(self.text_file,"r") as input:
-                self.instr = [line.strip() for line in input]
-        except FileNotFoundError:
-            from os import getcwd
-            log.error(f'File "{self.text_file}" was not found in "{getcwd()}"')
-            log.error('Exiting...')
-            exit()
-
-        for instruction in self.instr:
-            #split up every line in file to FU or Instruction
-            self.split_line(instruction)
-
-    def run(self):
-        while not self.algorithm.complete():
-            self.algorithm.tick()
 
 
 class Scoreboard:
@@ -272,27 +211,3 @@ class Scoreboard:
                 self.write(fu)
 
         self.clock += 1
-
-if __name__ == '__main__':
-    logging.basicConfig(level=LOG_LEVEL, format=FORMAT)
-    log = logging.getLogger(__name__)
-
-    sb = Setup(TEXT_FILE)
-    sb.split_file(TEXT_FILE)
-    sb.run()
-
-    print('_'*18 + ' SCOREBOARD TABLE ' + '_'*18)
-    print('Instruction\t\tIS\tRD\tEX\tWB')
-    for inst in sb.algorithm.instructions:
-        print(str(inst.print_inst()))
-
-    print('_'*55)
-    print('\nMEMORY')
-    for mem in sb.algorithm.memory:
-        print(str(mem) + ':\t'+ str(sb.algorithm.memory[mem]))
-
-    print('_'*55)
-    print('\nFP REGISTERS')
-    for reg in sb.algorithm.registers:
-        if 'F' in reg:
-            print(str(reg) + ':\t' + str(sb.algorithm.registers[reg]))
