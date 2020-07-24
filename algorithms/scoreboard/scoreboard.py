@@ -10,7 +10,6 @@
 #########################################################
 
 import logging
-import re
 import time
 
 import hardware
@@ -66,8 +65,15 @@ class Setup:
 
     def split_file(self):
         #reading lines out from file then sending lines off for further spliting
-        with open(self.text_file,"r") as input:
-            self.instr = [line.strip() for line in input]
+        try:
+            with open(self.text_file,"r") as input:
+                self.instr = [line.strip() for line in input]
+        except FileNotFoundError:
+            from os import getcwd
+            log.error(f'File "{self.text_file}" was not found in "{getcwd()}"')
+            log.error('Exiting...')
+            exit()
+
         for instruction in self.instr:
             #split up every line in file to FU or Instruction
             self.split_line(instruction)
@@ -223,7 +229,7 @@ class Scoreboard:
         # assumes all functions are not in lock initally
         log.debug('Scoreboard tick')
         if logging.getLevelName(log.getEffectiveLevel()) == 'DEBUG':
-            time.sleep(0.2)
+            time.sleep(0.1)
 
         for fu in self.units:
             fu.lock = False
@@ -279,7 +285,7 @@ if __name__ == '__main__':
     print('Instruction\t\tIS\tRD\tEX\tWB')
     for inst in sb.algorithm.instructions:
         print(str(inst.print_inst()))
-        
+
     print('_'*55)
     print('\nMEMORY')
     for mem in sb.algorithm.memory:

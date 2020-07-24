@@ -10,7 +10,6 @@
 #########################################################
 
 import logging
-import re
 import time
 
 import hardware
@@ -18,10 +17,6 @@ import hardware
 from .fu_tomasulo import FunctionalUnit
 from .decode_tomasulo import instructions as inst_funcs
 from .rob import ReorderBuffer as rebuffer
-
-#import FunctionalUnit
-#import instructions as inst_funcs
-#import RorderBuffer as rebuffer
 
 TEXT_FILE = '../tomasulo_input.txt'        #INPUT FILE NAME
 FORMAT = '[%(levelname)s][%(funcName)s][%(lineno)d]: %(message)s'
@@ -78,8 +73,15 @@ class Setup:
 
     def split_file(self):
         #reading lines out from file then sending lines off for further spliting
-        with open(self.text_file,"r") as input:
-            self.instr = [line.strip() for line in input]
+        try:
+            with open(self.text_file,"r") as input:
+                self.instr = [line.strip() for line in input]
+        except FileNotFoundError:
+            from os import getcwd
+            log.error(f'File"{self.text_file}" was not found in "{getcwd()}"')
+            log.error('Exiting...')
+            exit()
+
         for instruction in self.instr:
             #split up every line in file to FU or Instruction
             self.split_line(instruction)
@@ -344,7 +346,7 @@ if __name__ == '__main__':
     from fu_tomasulo import FunctionalUnit
     from decode_tomasulo import instructions as inst_funcs
     from rob import ReorderBuffer as rebuffer
-    
+
     logging.basicConfig(level=LOG_LEVEL, format=FORMAT)
     log = logging.getLogger(__name__)
 
