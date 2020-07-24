@@ -1,17 +1,35 @@
-# EECE 552 Computer Design MIPS Scoreboarding Algorithm Project
+# MIPS Scoreboarding and Tomasulo Algorithm
+
+# EECE 552 Computer Design 
 
 ### Authors: Eugene Merecki
 
 ### Description: 
 
+#### Scoreboarding
 
-Scoreboarding is a centralized method, first used in the CDC 6600 computer, for dynamically scheduling a pipeline so that the instructions can execute out of order when there are no conflicts and the hardware is available.
+Scoreboarding is a centralized method, first used in the CDC 6600 computer, 
+for dynamically scheduling a pipeline so that the instructions can execute out of 
+order when there are no conflicts and the hardware is available.
 
 Instructions are decoded in order and go through the following four stages.
 - Issue
 - Read Operands
 - Execution
 - Write Result
+
+#### Tomasulo’s
+
+Tomasulo’s algorithm is a computer architecture hardware algorithm for dynamic 
+scheduling of instructions that allows out-of-order execution and enables more 
+efficient use of multiple execution units.
+
+Instructions are decoded in order and go through the following four stages.
+- Issue
+- Execution
+- Write Result
+
+#### Note
 
 This program is coded in Python 2.7.12 then converted to Python 3.7
 
@@ -58,9 +76,9 @@ ________________________________________________________________________________
 When creating the input file, there must NOT be any empty lines. 
 Otherwise the program will not run because of a null instruction.
 
-## Example Input File (with looping):
+## Example Scoreboarding Input File (with looping):
 
-These insructions are supplied in the **in.txt** file.
+These insructions are supplied in the **scoreboard_input.txt** file.
 This provides a convenient table for deciphering the parts of the instruction.
 
 #### Functional Unit Inputs
