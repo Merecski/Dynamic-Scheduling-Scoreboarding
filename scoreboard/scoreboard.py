@@ -13,109 +13,22 @@ import logging
 import re
 import time
 
-from fu_scoreboard import FunctionalUnit
-from decode_scoreboard import instructions as inst_funcs
+import hardware
+
+from .fu_scoreboard import FunctionalUnit
+from .decode_scoreboard import instructions as inst_funcs
 
 TEXT_FILE = 'scoreboard_input.txt'        #INPUT FILE NAME
 FORMAT = '[%(levelname)s][%(funcName)s][%(lineno)d]: %(message)s'
-LOG_LEVEL = logging.INFO
+LOG_LEVEL = logging.DEBUG
+log = logging.getLogger(__name__)
 
-# All of the initialized memory as specified in project pdf
-memory = {
-    0:      45,
-    1:      12,
-    2:      0,
-    3:      0,
-    4:      10,
-    5:      135,
-    6:      254,
-    7:      127,
-    8:      18,
-    9:      4,
-    10:     55,
-    11:     8,
-    12:     2,
-    13:     98,
-    14:     13,
-    15:     5,
-    16:     223,
-    17:     158,
-    18:     167,
-}
-
-# Creating all possible registers to be used and initialized to be empty
-registers = {
-    'F0':   None,
-    'F1':   None,
-    'F2':   None,
-    'F3':   None,
-    'F4':   None,
-    'F5':   None,
-    'F6':   None,
-    'F7':   None,
-    'F8':   None,
-    'F9':   None,
-    'F10':  None,
-    'F11':  None,
-    'F12':  None,
-    'F13':  None,
-    'F14':  None,
-    'F15':  None,
-    'F16':  None,
-    'F17':  None,
-    'F18':  None,
-    'F19':  None,
-    'F20':  None,
-    'F21':  None,
-    'F22':  None,
-    'F23':  None,
-    'F24':  None,
-    'F25':  None,
-    'F26':  None,
-    'F27':  None,
-    'F28':  None,
-    'F29':  None,
-    'F30':  None,
-    'F31':  None,
-    '$0':   None,
-    '$1':   None,
-    '$2':   None,
-    '$3':   None,
-    '$4':   None,
-    '$5':   None,
-    '$6':   None,
-    '$7':   None,
-    '$8':   None,
-    '$9':   None,
-    '$10':  None,
-    '$11':  None,
-    '$12':  None,
-    '$13':  None,
-    '$14':  None,
-    '$15':  None,
-    '$16':  None,
-    '$17':  None,
-    '$18':  None,
-    '$19':  None,
-    '$20':  None,
-    '$21':  None,
-    '$22':  None,
-    '$23':  None,
-    '$24':  None,
-    '$25':  None,
-    '$26':  None,
-    '$27':  None,
-    '$28':  None,
-    '$29':  None,
-    '$30':  None,
-    '$31':  None,
-}
 
 class Setup:
 
     def __init__(self, txt_file):
-        self.sb = Scoreboard()
-        self.text = txt_file
+        self.algorithm = Scoreboard()
+        self.text_file = txt_file
         self.instr = []
         self.func_unit = []
 
@@ -137,7 +50,7 @@ class Setup:
         instruction = inst_func(' '.join(line))
 
         #Creating a List of object type Instruction with it's own personal variables
-        self.sb.instructions.append(instruction)
+        self.algorithm.instructions.append(instruction)
 
     def split_fu(self, line):
         #splits functional unit and append objects on a variable loop
@@ -148,23 +61,28 @@ class Setup:
         for i in range(0,int(line[1])):
             #list of object type Functional Units with own variables
             #appending FU for specified number
-            self.sb.units.append(FunctionalUnit(f_unit, int(clock)))
+            self.algorithm.units.append(FunctionalUnit(f_unit, int(clock)))
 
 
-    def split_file(self, txt_file):
+    def split_file(self):
         #reading lines out from file then sending lines off for further spliting
-        split = Setup(txt_file)
-        with open(txt_file,"r") as input:
-            code = [line.strip() for line in input]
-        for instruction in code:
+        with open(self.text_file,"r") as input:
+            self.instr = [line.strip() for line in input]
+        for instruction in self.instr:
             #split up every line in file to FU or Instruction
             self.split_line(instruction)
+
+    def run(self):
+        while not self.algorithm.complete():
+            self.algorithm.tick()
 
 
 class Scoreboard:
     def __init__(self):
         self.units = []
         self.instructions = []
+        self.memory = hardware.memory
+        self.registers = hardware.registers
         self.register_status = {}
         self.pc = 0
         self.clock = 1
@@ -203,7 +121,7 @@ class Scoreboard:
         update FU with read procedure
         update instruction when it read
         """
-        fu.read(memory, registers)
+        fu.read(self.memory, self.registers)
         self.instructions[fu.inst_count].read = self.clock
 
     def can_execute(self, fu):
@@ -232,10 +150,10 @@ class Scoreboard:
     def write(self, fu):
         value = fu.write(self.units)
 
-        if fu.fi not in registers and not fu.is_branch:
-            memory[fu.fi] = registers[fu.fk]
+        if fu.fi not in self.registers and not fu.is_branch:
+            self.memory[fu.fi] = self.registers[fu.fk]
         elif not fu.is_branch:
-            registers[fu.fi] = value
+            self.registers[fu.fi] = value
 
         self.instructions[fu.inst_count].written = self.clock
 
@@ -354,26 +272,21 @@ if __name__ == '__main__':
     log = logging.getLogger(__name__)
 
     sb = Setup(TEXT_FILE)
-
     sb.split_file(TEXT_FILE)
-
-    while not sb.sb.complete():
-        sb.sb.tick()
+    sb.run()
 
     print('_'*18 + ' SCOREBOARD TABLE ' + '_'*18)
     print('Instruction\t\tIS\tRD\tEX\tWB')
-    for inst in sb.sb.instructions:
+    for inst in sb.algorithm.instructions:
         print(str(inst.print_inst()))
         
     print('_'*55)
     print('\nMEMORY')
-    for mem in memory:
-        print(str(mem) + ':\t'+ str(memory[mem]))
+    for mem in sb.algorithm.memory:
+        print(str(mem) + ':\t'+ str(sb.algorithm.memory[mem]))
 
     print('_'*55)
     print('\nFP REGISTERS')
-    for reg in registers:
+    for reg in sb.algorithm.registers:
         if 'F' in reg:
-            print(str(reg) + ':\t' + str(registers[reg]))
-
-
+            print(str(reg) + ':\t' + str(sb.algorithm.registers[reg]))
