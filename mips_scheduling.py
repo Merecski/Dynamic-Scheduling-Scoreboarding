@@ -9,7 +9,6 @@ import logging
 import algorithms
 
 FORMAT = '[%(levelname)s][%(funcName)s][%(lineno)d]: %(message)s'
-logging.basicConfig(level=args.log_level, format=FORMAT)
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-s', '--scoreboard', action='store_true', default=False,
@@ -24,6 +23,7 @@ parser.add_argument('-l', '--log_level', type=str, default='WARNING', choices=['
 def main():
     args = parser.parse_args()
 
+    logging.basicConfig(level=args.log_level, format=FORMAT)
     log = logging.getLogger(__name__)
 
     if args.scoreboard:
