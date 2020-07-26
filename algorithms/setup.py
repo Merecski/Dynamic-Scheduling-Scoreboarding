@@ -1,14 +1,9 @@
+""" Basic class to ease the creattion of MIPS algorithms
 """
-Basic class to ease the creattion of MIPS algorithms
-"""
-
-
-import algorithms.scoreboard
-dir(algorithms.scoreboard)
 
 class Setup:
     """Software defined MIPS instruction properties
-    
+
     Args:
         text_file (str): Location of input file
         instr (list): Every instruction in input file
@@ -24,35 +19,35 @@ class Setup:
         self.reorder_buffer = None
 
     def setup_scoreboard(self):
-        from .scoreboard import scoreboard
-        
-        self.algorithm = scoreboard.Scoreboard()
-        self.functional_unit = scoreboard.FunctionalUnit
-        self.instruction_functions = scoreboard.inst_funcs
+        from . import scoreboard as sb
+
+        self.algorithm = sb.Scoreboard()
+        self.functional_unit = sb.FunctionalUnit
+        self.instruction_functions = sb.instruction_functions
         self.split_file()
         for instruction in self.instr:
             #split up every line in file to FU or Instruction
             self.split_scoreboard_line(instruction)
 
     def setup_tomasulo(self):
-        from .tomasulo import tomasulo
-        
-        self.algorithm = tomasulo.Tomasulo()
-        self.functional_unit = tomasulo.FunctionalUnit
-        self.instruction_functions = tomasulo.inst_funcs
-        self.reorder_buffer = tomasulo.rebuffer
+        from . import tomasulo as tom
+
+        self.algorithm = tom.Tomasulo()
+        self.functional_unit = tom.FunctionalUnit
+        self.instruction_functions = tom.instruction_functions
+        self.reorder_buffer = tom.ReorderBuffer
         self.split_file()
         for instruction in self.instr:
             #split up every line in file to FU or Instruction
             self.split_tomasulo_line(instruction)
-   
+
     def split_scoreboard_line(self, line):
         #determines if the current line is a command for a functional unit or instruction
         if line[0] == '.':
             self.split_fu(line)
         else:
             self.split_inst(line)
-            
+
     def split_tomasulo_line(self, line):
         #determines if the current line is a command for a functional unit or instruction
         if line[0] == '#':

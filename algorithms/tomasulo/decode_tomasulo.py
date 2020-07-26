@@ -1,11 +1,8 @@
-#########################################################
-#                                                       #
-#    EECE 552 Computer Design Project                   #
-#    Authors: Eugene Merecki                            #
-#    Description: MIPS Scoreboarding Algorithm          #
-#    Futher details in README.txt File                  #
-#                                                       #
-#########################################################
+"""EECE 552 Computer Design Project
+   Authors: Eugene Merecki
+   Description: MIPS Scoreboarding Algorithm
+   Futher details in README.txt File
+"""
 
 import re
 
@@ -32,7 +29,7 @@ class Instruction:
         self.op = op
         self.fi = dst
         self.fj = src1
-        self.fk = src2 
+        self.fk = src2
         self.di = self.dj = self.dk = None
         self.repr = repr
 
@@ -87,13 +84,13 @@ def __arithmetic(inst):
     return Instruction(inst, op, fi, fj, fk)
 
 
-instructions = {    
+instructions = {
     # Variable function names to point op code to correct spliting method
     # for loading instructions
     'L.D':        __load,
     'S.D':        __store,
     'BEQ':        __branch,
-    'BNE':        __branch,    
+    'BNE':        __branch,
     'ADD':        __arithmetic,
     'ADDI':        __arithmetic,
     'SUB':        __arithmetic,
@@ -116,6 +113,6 @@ functional_units = {
     'ADD.D':    'add',
     'SUB.D':    'add',
     'MULT.D':    'mult',
-    'DIV.D':    'div',    
+    'DIV.D':    'div',
 }
 

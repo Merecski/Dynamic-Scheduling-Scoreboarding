@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-Main function to invoke the two MIPS Pipline algorithm simulators.
+"""Main function to invoke the two MIPS Pipline algorithm simulators.
 """
 
 import argparse
@@ -26,18 +25,16 @@ def main():
 
     logging.basicConfig(level=args.log_level, format=FORMAT)
     log = logging.getLogger(__name__)
-    log.debug('Debug enabled')
-    
-    """
+
     if args.scoreboard:
         from algorithms import scoreboard
         if args.filename:
             filename = args.filename
         else:
-            filename = 'scoreboard_input.txt'
+            filename = 'examples/scoreboard_input.txt'
 
-        architecure = scoreboard.Setup(filename)
-        architecure.split_file()
+        architecure = algorithms.Setup(filename)
+        architecure.setup_scoreboard()
         architecure.run()
 
         print('_'*18 + ' SCOREBOARD TABLE ' + '_'*18)
@@ -50,36 +47,16 @@ def main():
         if args.filename:
             filename = args.filename
         else:
-            filename = 'tomasulo_input.txt'
-
-        architecure = tomasulo.Setup(filename)
-        architecure.split_file()
-        architecure.run()
-        
-        print('_'*18 + ' TOMASULO TABLE ' + '_'*18)
-        print('Instruction\t\tIS\tEX\tWB\tCM')
-        for instruction in architecure.algorithm.instructions:
-            print(str(instruction.print_inst()))
-    """
-    
-    if args.scoreboard:
-        if args.filename:
-            filename = args.filename
-        else:
-            filename = 'scoreboard_input.txt'
-
-        architecure = algorithms.Setup(filename)
-        architecure.setup_scoreboard()
-        architecure.run()
-    elif args.tomasulo:
-        if args.filename:
-            filename = args.filename
-        else:
-            filename = 'tomasulo_input.txt'
+            filename = 'examples/tomasulo_input.txt'
 
         architecure = algorithms.Setup(filename)
         architecure.setup_tomasulo()
         architecure.run()
+
+        print('_'*18 + ' TOMASULO TABLE ' + '_'*18)
+        print('Instruction\t\tIS\tEX\tWB\tCM')
+        for instruction in architecure.algorithm.instructions:
+            print(str(instruction.print_inst()))
 
     else:
         log.critical('No algorithim provided.\n')

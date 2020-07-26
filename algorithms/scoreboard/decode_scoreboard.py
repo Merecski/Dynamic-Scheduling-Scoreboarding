@@ -1,17 +1,14 @@
-#########################################################
-#                                                       #
-#    EECE 552 Computer Design Project                   #
-#    Authors: Eugene Merecki                            #
-#    Description: MIPS Scoreboarding Algorithm          #
-#    Futher details in README.txt File                  #
-#                                                       #
-#########################################################
+"""EECE 552 Computer Design Project
+    Authors: Eugene Merecki
+    Description: MIPS Scoreboarding Algorithm
+    Futher details in README.txt File
+"""
 
 import re
 
 class Instruction:
     """Software defined MIPS instruction properties
-    
+
     Args:
         issued:
         read:
